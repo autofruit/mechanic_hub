@@ -8,7 +8,7 @@ This Hub has 3 button: UP, DOWN, SELECT/BACK.You can use 3 button to contact wit
   -SDA - D2
   -Button UP, DOWN, S/B - D5,D6,D7
 3.Program
-  -Dowload Source code.
+  -Dowload Source code and extract.
   -Download libraries: Adafruit_GFX.h, Wire.h, Adafruit_SSD1306.h.
   -Dowload and select board NodeMCU 1.0 esp12E module -> select serial port.
   -Select Tool -> set Upload Speed:115200,Erase Flash:"All Flash Content".
