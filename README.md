@@ -17,6 +17,6 @@ This Hub has 3 button: UP, DOWN, SELECT/BACK.You can use 3 button to contact wit
 
 
 
--nếu bạn ko bt đọc tiếng anh hãy học english
+-nếu bạn ko bt đọc tiếng anh hãy học english!
 
 
