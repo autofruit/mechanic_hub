@@ -10,7 +10,7 @@
 #define BUTTON_DOWN_PIN   D6
 #define BUTTON_SELECT_PIN D7
 
-#define HOLD_THRESHOLD 500  // Thời gian giữ lâu (ms)
+#define HOLD_THRESHOLD 500  // Thời gian giữ lâu để thoát 1 chức năng (ms)
 
 bool selectPressed = false;
 bool selectHoldProcessed = false;
@@ -124,7 +124,7 @@ void setup() {
   delay(2000);
   Serial.println(F("Starting!"));
 
-  // Khởi tạo giao tiếp I2C nếu dùng D1/D2 trên ESP8266
+  // Khởi tạo giao tiếp I2C nếu dùng D1/D2 trên ESP8266 còn Arduino thì bỏ dòng này đi rồi SDA-A4,SCK/SCL vào A5 là nó mặc định.
   Wire.begin(D1, D2);  // SDA, SCL
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
