@@ -13,10 +13,10 @@ This Hub has 3 button: UP, DOWN, SELECT/BACK.You can use 3 button to contact wit
   -Dowload and select board NodeMCU 1.0 esp12E module -> select serial port.
   -Select Tool -> set Upload Speed:115200,Erase Flash:"All Flash Content".
   -Upload code to esp8266
-
-
+----------------------------------------------------------------------------------
+*This project is in progress!
 
 
 -nếu bạn ko bt đọc tiếng anh hãy học english!
-
+-code còn sơ sài nên cần rút gọn thành các module, hàm nhỏ để dễ thuận tiện tái sử dụng.
 
