@@ -10,7 +10,7 @@
 #define BUTTON_DOWN_PIN   D6
 #define BUTTON_SELECT_PIN D7
 
-#define HOLD_THRESHOLD 500  // Thời gian giữ lâu để thoát 1 chức năng (ms)
+#define HOLD_THRESHOLD 500  // Thời gian giữ lâu (ms)
 
 bool selectPressed = false;
 bool selectHoldProcessed = false;
@@ -23,6 +23,8 @@ int lastServo1 = 0;
 int lastServo2 = 0;
 
 bool mode1 = false;
+int qr_state = 0;
+
 bool mode2 = false;
 bool mode3 = false;
 bool mode_total = false;
@@ -90,6 +92,18 @@ void display_servo_phase(int currentServo1,int currentServo2){
   
 }
 
+void display_qr(int qr_code_state){
+  if(qr_code_state == 0){
+    display.clearDisplay();
+    display.drawBitmap(0, 0,face_code, 128, 64, WHITE);
+    display.display();
+  }else{
+    display.clearDisplay();
+    display.drawBitmap(0, 0,bank_code, 128, 64, WHITE);
+    display.display();
+  }
+}
+
 void set_menu_state_on(int menu_index){
   switch(menu_index){
     case 0:
@@ -124,7 +138,7 @@ void setup() {
   delay(2000);
   Serial.println(F("Starting!"));
 
-  // Khởi tạo giao tiếp I2C nếu dùng D1/D2 trên ESP8266 còn Arduino thì bỏ dòng này đi rồi SDA-A4,SCK/SCL vào A5 là nó mặc định.
+  // Khởi tạo giao tiếp I2C nếu dùng D1/D2 trên ESP8266
   Wire.begin(D1, D2);  // SDA, SCL
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
@@ -141,7 +155,7 @@ void setup() {
   display.display();
 }
 
-void text_draw(String text) {
+void text_draw(String text) {//áp dụng cho ghi chữ coming soon ra giữa màn hình
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(BLACK, WHITE);
@@ -167,11 +181,23 @@ void loop() {
     if(!mode_total){
       menu_state += 1;
     }else{
-      if(mode_ser == 0){
-        ser1 += (ser1<180)? 1 : 0;
-      }else{
-        ser2 += (ser2<180)? 1 : 0;
-      }
+      switch(menu_state){
+        case 0:
+          if(mode_ser == 0){
+            ser1+=(ser1<180)?1:0;
+          }else{
+            ser2+=(ser2<180)?1:0;
+          }
+          break;
+        case 1:
+          break;
+        case 2:
+          break;
+        case 3:
+          break;
+        default:
+          break;
+          }
     }
     delay(150); // debounce
   }
@@ -182,11 +208,23 @@ void loop() {
     if(!mode_total){
       menu_state -= 1;
     }else{
-      if(mode_ser == 0){
-        ser1 -= (ser1>0)? 1 : 0;
-      }else{
-        ser2 -= (ser2>0)? 1 : 0;
-      }
+      switch(menu_state){
+        case 0:
+          if(mode_ser == 0){
+            ser1-=(ser1>0)?1:0;
+          }else{
+            ser2-=(ser2>0)?1:0;
+          }
+          break;
+        case 1:
+          break;
+        case 2:
+          break;
+        case 3:
+          break;
+        default:
+          break;
+          }
     }
     delay(150); // debounce
   }
@@ -223,14 +261,32 @@ void loop() {
       if(!mode_total){
         set_menu_state_on(menu_state);
       }else{
-        mode_ser +=1;
+        switch(menu_state){
+          case 0:
+          mode_ser +=1;
+          break;
+          case 1:
+          qr_state +=1;
+          break;
+          case 2:
+          break;
+          case 3:
+          break;
+          default:
+          break;
+        }
       }
     }
     selectPressed = false;
   }
+
   if (mode_ser == 2){
     mode_ser = 0;
   }
+  if (qr_state == 2){
+    qr_state = 0;
+  }
+
   Serial.printf("dang o ser: %d\n",mode_ser);
 
   if(mode_total){//da chon 1 chuc nang
@@ -239,7 +295,7 @@ void loop() {
     display_servo_phase(ser1,ser2);
     break;
     case 1:
-    text_draw("Coming Soon!");
+    display_qr(qr_state);
     break;
     case 2:
     text_draw("Coming Soon!");
@@ -254,9 +310,10 @@ void loop() {
     switch(menu_state){
     case 0:
     display.clearDisplay();
-    display.drawBitmap(0, 0,servo_phase, 128, 64, WHITE);
+    display.drawBitmap(0, 0,servo_phase, 128, 64, WHITE);               
     display.display();
     staticDrawn0 = false;
+    mode_ser = 0;
     break;
     case 1:
     display.clearDisplay();
